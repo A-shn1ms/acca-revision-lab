@@ -1,0 +1,1146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ACCA Revision Lab · FR</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,600;14..32,700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            background: #0B1120;
+            color: #E2E8F0;
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            padding: 2rem 1rem;
+        }
+        .app {
+            max-width: 1100px;
+            width: 100%;
+        }
+
+        /* header */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            background: #1E293B;
+            border-radius: 1rem;
+            padding: 1rem 1.5rem;
+        }
+        .logo h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            color: #F1F5F9;
+        }
+        .logo span {
+            color: #38BDF8;
+        }
+        .logo small {
+            color: #94A3B8;
+            font-size: 0.85rem;
+        }
+        .xp-bar {
+            flex: 1;
+            max-width: 300px;
+            margin-left: auto;
+            min-width: 160px;
+        }
+        .xp-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: #94A3B8;
+            margin-bottom: 0.25rem;
+        }
+        .xp-progress {
+            height: 10px;
+            background: #334155;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        .xp-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #38BDF8, #818CF8);
+            width: 0%;
+            transition: width 0.4s ease;
+        }
+        .badge-container {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+        .badge {
+            background: #334155;
+            padding: 0.25rem 0.75rem;
+            border-radius: 999px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: #CBD5E1;
+        }
+        .badge.earned {
+            background: #0F766E;
+            color: #CCFBF1;
+        }
+
+        /* dashboard */
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        .topic-card {
+            background: #1E293B;
+            border-radius: 1rem;
+            padding: 1.2rem;
+            cursor: pointer;
+            border: 1px solid #334155;
+            transition: all 0.2s;
+            position: relative;
+        }
+        .topic-card:hover {
+            border-color: #38BDF8;
+            transform: translateY(-3px);
+        }
+        .topic-card.completed {
+            border-color: #10B981;
+            background: #0F172A;
+        }
+        .topic-card h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+        }
+        .topic-card .meta {
+            font-size: 0.8rem;
+            color: #94A3B8;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .stars {
+            color: #FBBF24;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+        }
+
+        /* topic view */
+        .topic-view {
+            display: none;
+        }
+        .topic-view.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .topic-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+        .topic-header h2 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #F1F5F9;
+        }
+        .back-btn {
+            background: #334155;
+            border: none;
+            color: #E2E8F0;
+            padding: 0.5rem 1.2rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: background 0.15s;
+        }
+        .back-btn:hover {
+            background: #475569;
+        }
+
+        .notes-box {
+            background: #1E293B;
+            border-radius: 1rem;
+            padding: 1.2rem 1.5rem;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid #38BDF8;
+        }
+        .notes-box h4 {
+            color: #38BDF8;
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+        }
+        .notes-box ul {
+            margin-left: 1.2rem;
+            color: #CBD5E1;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        .notes-box li {
+            margin-bottom: 0.3rem;
+        }
+
+        .quiz-container {
+            background: #1E293B;
+            border-radius: 1rem;
+            padding: 1.2rem 1.5rem;
+        }
+        .question-text {
+            font-weight: 600;
+            margin-bottom: 1rem;
+            font-size: 1.05rem;
+            color: #F1F5F9;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+        }
+        .option-btn {
+            background: #0F172A;
+            border: 1px solid #334155;
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            text-align: left;
+            font-weight: 500;
+            cursor: pointer;
+            color: #E2E8F0;
+            transition: 0.15s;
+            font-size: 0.95rem;
+        }
+        .option-btn:hover:not(:disabled) {
+            background: #1E293B;
+            border-color: #38BDF8;
+        }
+        .option-btn.correct {
+            background: #064E3B;
+            border-color: #10B981;
+            color: #D1FAE5;
+        }
+        .option-btn.wrong {
+            background: #7F1D1D;
+            border-color: #EF4444;
+            color: #FEE2E2;
+        }
+        .option-btn:disabled {
+            cursor: default;
+            opacity: 0.9;
+        }
+
+        .feedback-msg {
+            margin-top: 1rem;
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+        .feedback-msg.correct {
+            background: #064E3B;
+            color: #A7F3D0;
+        }
+        .feedback-msg.wrong {
+            background: #7F1D1D;
+            color: #FECACA;
+        }
+
+        .quiz-actions {
+            margin-top: 1.2rem;
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+        .btn {
+            background: #38BDF8;
+            color: #0B1120;
+            font-weight: 700;
+            border: none;
+            padding: 0.6rem 1.4rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background 0.15s, transform 0.1s;
+        }
+        .btn:hover {
+            background: #7DD3FC;
+            transform: scale(0.97);
+        }
+        .btn.secondary {
+            background: #334155;
+            color: #E2E8F0;
+        }
+        .btn.secondary:hover {
+            background: #475569;
+        }
+
+        .stats-row {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 1rem;
+            font-size: 0.85rem;
+            color: #94A3B8;
+            flex-wrap: wrap;
+        }
+
+        .xp-animation {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #10B981;
+            color: #fff;
+            padding: 0.4rem 1.2rem;
+            border-radius: 999px;
+            font-weight: 700;
+            animation: pop 1s ease forwards;
+            z-index: 100;
+            pointer-events: none;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+        }
+        @keyframes pop {
+            0% {
+                transform: scale(0.5);
+                opacity: 0;
+            }
+            20% {
+                transform: scale(1.2);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 0;
+            }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        @media (max-width: 640px) {
+            .header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .xp-bar {
+                max-width: 100%;
+                margin-left: 0;
+            }
+            .badge-container {
+                margin-top: 0.25rem;
+            }
+            .topic-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .topic-header h2 {
+                font-size: 1.3rem;
+            }
+            .notes-box ul {
+                font-size: 0.85rem;
+            }
+            .option-btn {
+                font-size: 0.9rem;
+                padding: 0.6rem 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app">
+
+        <!-- HEADER -->
+        <header class="header">
+            <div class="logo">
+                <h1><span>ACCA</span> Revision Lab</h1>
+                <small>Financial Accounting (FR)</small>
+            </div>
+            <div class="xp-bar" id="xpBarContainer">
+                <div class="xp-label">
+                    <span id="levelDisplay">Level: Novice</span>
+                    <span id="xpDisplay">0 XP</span>
+                </div>
+                <div class="xp-progress">
+                    <div class="xp-fill" id="xpFill" style="width:0%"></div>
+                </div>
+            </div>
+            <div class="badge-container" id="badges"></div>
+        </header>
+
+        <!-- DASHBOARD -->
+        <div id="dashboard" class="dashboard"></div>
+
+        <!-- TOPIC DETAIL VIEW -->
+        <div id="topicView" class="topic-view">
+            <div class="topic-header">
+                <h2 id="topicTitle"></h2>
+                <button class="back-btn" id="backToDashboard">← Dashboard</button>
+            </div>
+            <div class="notes-box" id="notesBox"></div>
+            <div class="quiz-container" id="quizContainer"></div>
+        </div>
+
+    </div>
+
+    <script>
+        (function() {
+            'use strict';
+
+            // ---------- TOPICS ----------
+            const topics = [{
+                id: 'rev',
+                title: 'Revenue (IFRS 15)',
+                notes: [
+                    '5‑step model: Identify contract, performance obligations, transaction price, allocate price, recognise revenue when obligations are satisfied.',
+                    'Determine whether revenue is recognised over time or at a point in time.',
+                    'Contract modifications: treated as separate contract if distinct goods/services & price reflects standalone selling price.',
+                    'Variable consideration: estimate using expected value or most likely amount; only include if highly probable no significant reversal.',
+                    'Principal vs agent: principal recognises gross revenue; agent recognises net fee/commission.',
+                    'Common exam errors: recognising revenue before control transfers, incorrect treatment of contract costs (capitalise incremental costs of obtaining a contract if recoverable).'
+                ],
+                questions: [{
+                    q: 'Under IFRS 15, a performance obligation is satisfied over time if:',
+                    opts: [
+                        'The customer simultaneously receives and consumes the benefits',
+                        'The entity has a right to payment for performance completed to date',
+                        'The entity creates an asset with no alternative use and has enforceable right to payment',
+                        'All of the above'
+                    ],
+                    correct: 3,
+                    exp: 'All three criteria indicate over‑time recognition (IFRS 15.35).'
+                }, {
+                    q: 'A company sells a machine with one year of free maintenance. Total contract price is $120,000. Standalone selling prices: machine $110,000, maintenance $10,000. How much revenue should be allocated to the machine?',
+                    opts: ['$110,000', '$120,000', '$100,000', '$132,000'],
+                    correct: 0,
+                    exp: 'Relative standalone selling prices: machine = ($110k / $120k) × $120k = $110,000.'
+                }, {
+                    q: 'ABC Ltd receives a non‑refundable upfront fee of $5,000 upon signing a 2‑year service contract. The fee does not relate to any distinct good or service. How is it treated?',
+                    opts: [
+                        'Recognised immediately as revenue',
+                        'Deferred and recognised over the contract term',
+                        'Recognised as a liability indefinitely',
+                        'Recognised as other income'
+                    ],
+                    correct: 1,
+                    exp: 'An upfront fee not for a distinct good/service is part of the transaction price and recognised over the contract period.'
+                }, {
+                    q: 'Which of the following is NOT a separate performance obligation?',
+                    opts: [
+                        'A tablet sold with a two‑year warranty that can be purchased separately',
+                        'A construction service where the customer controls the work in progress',
+                        'A bundle of goods that are highly interrelated and must be integrated',
+                        'A licence that provides a right to access IP over time'
+                    ],
+                    correct: 2,
+                    exp: 'Goods that are highly interrelated and not distinct individually are accounted for as a single performance obligation.'
+                }, {
+                    q: 'A contract modification adds distinct goods for $80,000 at standalone selling price. The original contract price was $100,000. The modification should be treated as:',
+                    opts: [
+                        'A cumulative catch‑up adjustment',
+                        'A separate contract',
+                        'A termination of the old contract and creation of a new one',
+                        'A provision'
+                    ],
+                    correct: 1,
+                    exp: 'When distinct goods are added at standalone selling price, it is treated as a separate contract (IFRS 15.20).'
+                }]
+            }, {
+                id: 'lease',
+                title: 'Leases (IFRS 16)',
+                notes: [
+                    'Lessee accounting: recognise right‑of‑use (ROU) asset and lease liability at commencement date.',
+                    'Lease liability = PV of lease payments not yet paid (discount rate implicit in lease, or incremental borrowing rate).',
+                    'ROU asset = lease liability + initial direct costs + prepayments – lease incentives.',
+                    'Subsequent measurement: liability at amortised cost; ROU asset depreciated over shorter of lease term or useful life.',
+                    'Short‑term leases (≤12 months) and low‑value assets: exemption, expense on straight‑line basis.',
+                    'Exam focus: lease term includes extension options if reasonably certain to be exercised; variable lease payments not in liability unless depend on index/rate.'
+                ],
+                questions: [{
+                    q: 'Which discount rate should a lessee use to measure the lease liability?',
+                    opts: [
+                        'The lessor’s implicit rate if readily determinable',
+                        'The lessee’s incremental borrowing rate always',
+                        'The risk‑free rate',
+                        'The central bank base rate'
+                    ],
+                    correct: 0,
+                    exp: 'Use the rate implicit in the lease if readily determinable; otherwise, the lessee’s incremental borrowing rate.'
+                }, {
+                    q: 'A lessee signs a 5‑year lease with annual payments of $10,000 in arrears. Incremental borrowing rate is 6%. PV of payments = $42,124. Initial ROU asset and liability are:',
+                    opts: ['$42,124', '$50,000', '$40,000', '$45,000'],
+                    correct: 0,
+                    exp: 'Initial measurement of both ROU asset and lease liability = PV of lease payments = $42,124 (before adjustments).'
+                }, {
+                    q: 'A lease includes an option to extend for 3 years. The lessee is reasonably certain to exercise the option. How many years should be used for the lease term?',
+                    opts: ['5 years only', '8 years', '3 years', 'The longer of 5 and 3'],
+                    correct: 1,
+                    exp: 'Lease term = non‑cancellable period (5) + optional renewal periods if reasonably certain to exercise (3) = 8 years.'
+                }, {
+                    q: 'Variable lease payments based on usage or performance are:',
+                    opts: [
+                        'Included in the lease liability at commencement',
+                        'Excluded from the lease liability, expensed when incurred',
+                        'Capitalised as part of ROU asset',
+                        'Recognised as a provision'
+                    ],
+                    correct: 1,
+                    exp: 'Variable payments not dependent on an index or rate are excluded from the lease liability and recognised in profit or loss when incurred.'
+                }, {
+                    q: 'Which of the following is NOT part of the initial measurement of the ROU asset?',
+                    opts: [
+                        'Lease liability',
+                        'Initial direct costs',
+                        'Estimated restoration costs',
+                        'Future variable lease payments linked to CPI'
+                    ],
+                    correct: 3,
+                    exp: 'Variable payments linked to an index (CPI) are included in the lease liability, but they adjust the liability indirectly — they are not a separate direct addition to the ROU asset.'
+                }]
+            }, {
+                id: 'fininstr',
+                title: 'Financial Instruments (IFRS 9)',
+                notes: [
+                    'Classification depends on business model & contractual cash flow characteristics (SPPI test).',
+                    'Amortised cost: hold to collect contractual cash flows (SPPI). FVOCI: hold to collect and sell. FVTPL: all others.',
+                    'Equity instruments: default FVTPL, but may irrevocably elect FVOCI (no recycling).',
+                    'Impairment: expected credit loss (ECL) model – 12‑month ECL for Stage 1, lifetime ECL for Stages 2 & 3.',
+                    'Derecognition: financial asset when rights to cash flows expire or transferred; financial liability when extinguished.',
+                    'Common exam trick: convertible bonds – split between liability and equity.'
+                ],
+                questions: [{
+                    q: 'A bond with contractual cash flows that are solely payments of principal and interest (SPPI) is held within a business model whose objective is to collect contractual cash flows. How is it classified?',
+                    opts: ['FVTPL', 'FVOCI', 'Amortised cost', 'Equity'],
+                    correct: 2,
+                    exp: 'SPPI + hold to collect = amortised cost.'
+                }, {
+                    q: 'An entity acquires equity shares not held for trading. It irrevocably elects FVOCI. Dividends received are:',
+                    opts: [
+                        'Recognised in OCI only',
+                        'Recognised in profit or loss',
+                        'Never recognised',
+                        'Deferred until sale'
+                    ],
+                    correct: 1,
+                    exp: 'Dividends from FVOCI equity instruments are recognised in profit or loss (IFRS 9.5.7.6).'
+                }, {
+                    q: 'Under the ECL model, a significant increase in credit risk since initial recognition moves the instrument from:',
+                    opts: [
+                        'Stage 1 to Stage 2, requiring lifetime ECL',
+                        'Stage 2 to Stage 1',
+                        'No change',
+                        'Stage 1 to Stage 3 immediately'
+                    ],
+                    correct: 0,
+                    exp: 'Significant increase in credit risk → Stage 2, lifetime ECL recognised.'
+                }, {
+                    q: 'A convertible bond is accounted for as:',
+                    opts: [
+                        'A single liability',
+                        'A compound instrument: liability and equity components',
+                        'Equity only',
+                        'A derivative'
+                    ],
+                    correct: 1,
+                    exp: 'Convertible bonds contain a liability component (host debt) and an equity component (conversion option).'
+                }, {
+                    q: 'Transaction costs for a financial asset measured at FVTPL are:',
+                    opts: [
+                        'Capitalised and amortised',
+                        'Expensed immediately',
+                        'Added to the initial carrying amount',
+                        'Recognised in OCI'
+                    ],
+                    correct: 1,
+                    exp: 'For FVTPL instruments, transaction costs are expensed as incurred.'
+                }]
+            }, {
+                id: 'inventory',
+                title: 'Inventories (IAS 2)',
+                notes: [
+                    'Measured at lower of cost and net realisable value (NRV).',
+                    'Cost includes purchase price, import duties, transport, handling – net of trade discounts.',
+                    'Cost formulas: FIFO or weighted average cost (LIFO not allowed).',
+                    'NRV = estimated selling price less costs to complete and sell.',
+                    'Write‑downs reversed if NRV recovers (max original cost).',
+                    'Common errors: including abnormal waste, storage costs unless necessary before further production.'
+                ],
+                questions: [{
+                    q: 'Which of the following costs is included in inventory cost under IAS 2?',
+                    opts: [
+                        'Storage costs of finished goods',
+                        'Administrative overheads',
+                        'Freight‑in on raw materials',
+                        'Selling costs'
+                    ],
+                    correct: 2,
+                    exp: 'Freight‑in is a directly attributable purchase cost. Storage of finished goods and selling costs are excluded.'
+                }, {
+                    q: 'A product’s cost is $50 per unit. Estimated selling price is $60, costs to complete $5, selling costs $3. NRV is:',
+                    opts: ['$60', '$52', '$55', '$57'],
+                    correct: 1,
+                    exp: 'NRV = $60 − $5 − $3 = $52. (Cost $50, so no write‑down needed.)'
+                }, {
+                    q: 'A write‑down of inventory from $10,000 to NRV of $8,000 is recorded. Next period NRV recovers to $11,000. The inventory can be stated at:',
+                    opts: ['$11,000', '$10,000', '$8,000', '$9,000'],
+                    correct: 1,
+                    exp: 'Reversal is limited to the amount of the original write‑down, so inventory returns to original cost $10,000.'
+                }, {
+                    q: 'Which cost formula is NOT permitted under IAS 2?',
+                    opts: ['FIFO', 'Weighted average', 'LIFO', 'Specific identification'],
+                    correct: 2,
+                    exp: 'LIFO is prohibited.'
+                }, {
+                    q: 'Goods in transit shipped FOB shipping point at year‑end should be:',
+                    opts: [
+                        'Excluded from inventory',
+                        'Included in inventory of the buyer',
+                        'Included in inventory of the seller',
+                        'Treated as consignment'
+                    ],
+                    correct: 1,
+                    exp: 'FOB shipping point means control transfers to the buyer when goods are shipped.'
+                }]
+            }, {
+                id: 'ppe',
+                title: 'PPE (IAS 16)',
+                notes: [
+                    'Initial recognition at cost: purchase price + directly attributable costs (delivery, installation, site preparation).',
+                    'Subsequent measurement: cost model (cost less accumulated depreciation & impairment) or revaluation model (fair value less subsequent depreciation).',
+                    'Depreciation: systematic allocation over useful life; component depreciation if parts have different lives.',
+                    'Revaluation increases → OCI (revaluation surplus); decreases → P&L unless reverse of previous surplus.',
+                    'Derecognition: gain/loss = net disposal proceeds – carrying amount, recognised in P&L.',
+                    'Exam pitfalls: capitalising borrowing costs (IAS 23) for qualifying assets, subsequent expenditure (major inspections, overhauls).'
+                ],
+                questions: [{
+                    q: 'A machine is purchased for $100,000 with delivery $2,000 and installation $5,000. Annual maintenance contract $3,000. The initial cost is:',
+                    opts: ['$107,000', '$100,000', '$105,000', '$110,000'],
+                    correct: 0,
+                    exp: 'Cost = purchase + delivery + installation = $107,000; maintenance is expensed.'
+                }, {
+                    q: 'Under the revaluation model, an increase in value is:',
+                    opts: [
+                        'Recognised in profit or loss',
+                        'Recognised in OCI and accumulated in revaluation surplus',
+                        'Ignored',
+                        'Recognised as deferred income'
+                    ],
+                    correct: 1,
+                    exp: 'Revaluation gains go to OCI (revaluation surplus) unless reversing a previous revaluation decrease.'
+                }, {
+                    q: 'An asset cost $50,000, 10‑year life, zero residual. After 6 years, revalued to $30,000. Depreciation for the 7th year (remaining life 4 years) is:',
+                    opts: ['$7,500', '$5,000', '$3,000', '$6,000'],
+                    correct: 0,
+                    exp: 'Carrying amount after 6 years = $50k – ($5k×6) = $20k. Revalued to $30k. Remaining life 4 years → depreciation $30k / 4 = $7,500.'
+                }, {
+                    q: 'A major inspection cost capitalised as part of an asset is:',
+                    opts: [
+                        'Expensed immediately',
+                        'Added to asset cost and depreciated over the period to next inspection',
+                        'Treated as a separate asset with indefinite life',
+                        'Charged to revenue reserve'
+                    ],
+                    correct: 1,
+                    exp: 'Major inspection costs meeting recognition criteria are capitalised and depreciated over the period until the next major inspection.'
+                }, {
+                    q: 'When an item of PPE is derecognised, the gain or loss is:',
+                    opts: [
+                        'Included in OCI',
+                        'Recognised in profit or loss',
+                        'Adjusted against retained earnings',
+                        'Deferred'
+                    ],
+                    correct: 1,
+                    exp: 'Gains/losses on derecognition go to profit or loss.'
+                }]
+            }, {
+                id: 'provisions',
+                title: 'Provisions (IAS 37)',
+                notes: [
+                    'A provision is a liability of uncertain timing or amount.',
+                    'Recognition: present obligation (legal or constructive) from past event, probable outflow, reliable estimate.',
+                    'Measured at best estimate of expenditure required to settle obligation; discount if material.',
+                    'Restructuring provisions: only when detailed formal plan announced, creating valid expectation.',
+                    'Onerous contracts: provision for unavoidable costs exceeding benefits.',
+                    'Contingent liabilities: not recognised, disclosed unless remote.'
+                ],
+                questions: [{
+                    q: 'A company has a policy of refunding customers for defective products even though not legally required. At year‑end, it estimates $15,000 refunds. This is:',
+                    opts: [
+                        'A contingent liability',
+                        'A provision under IAS 37',
+                        'Not recognised',
+                        'An accrual'
+                    ],
+                    correct: 1,
+                    exp: 'A constructive obligation from past practice meets the recognition criteria for a provision.'
+                }, {
+                    q: 'Which of the following is NOT required to recognise a provision?',
+                    opts: [
+                        'Present obligation from past event',
+                        'Probable outflow of resources',
+                        'Reliable estimate',
+                        'Board resolution before year‑end'
+                    ],
+                    correct: 3,
+                    exp: 'A board resolution alone does not create an obligation; a constructive obligation requires a valid expectation.'
+                }, {
+                    q: 'A court case is ongoing. Lawyers advise it is probable (60%) the company will lose and pay $200,000. The provision should be:',
+                    opts: ['$200,000', '$120,000', '$0', 'Disclosed only'],
+                    correct: 0,
+                    exp: 'For a single obligation, the best estimate is the most likely outcome: $200,000.'
+                }, {
+                    q: 'An onerous contract is one where:',
+                    opts: [
+                        'The contract is unprofitable from the start',
+                        'The unavoidable costs of meeting the contract exceed the benefits',
+                        'The contract is cancelled',
+                        'It is a lease'
+                    ],
+                    correct: 1,
+                    exp: 'Onerous contract: unavoidable costs > economic benefits expected to be received.'
+                }, {
+                    q: 'A contingent liability should be:',
+                    opts: [
+                        'Recognised in the balance sheet',
+                        'Disclosed in the notes unless possibility of outflow is remote',
+                        'Completely ignored',
+                        'Recognised as a provision'
+                    ],
+                    correct: 1,
+                    exp: 'Contingent liabilities are disclosed unless remote.'
+                }]
+            }, {
+                id: 'tax',
+                title: 'Income Taxes (IAS 12)',
+                notes: [
+                    'Deferred tax recognised for temporary differences between carrying amount and tax base.',
+                    'Taxable temporary differences → deferred tax liability (DTL). Deductible temporary differences → deferred tax asset (DTA).',
+                    'DTA recognised only if probable future taxable profit will be available.',
+                    'Current tax: based on taxable profit for the period.',
+                    'Tax rates: use enacted or substantively enacted rates at reporting date.',
+                    'Permanent differences (e.g., non‑deductible expenses) never create deferred tax.'
+                ],
+                questions: [{
+                    q: 'A machine cost $100,000, tax depreciation $30,000, accounting depreciation $20,000. Tax base is $70,000, carrying amount $80,000. This creates:',
+                    opts: [
+                        'Deferred tax asset',
+                        'Deferred tax liability',
+                        'No deferred tax',
+                        'Current tax liability'
+                    ],
+                    correct: 1,
+                    exp: 'Carrying amount > tax base → taxable temporary difference → DTL.'
+                }, {
+                    q: 'A provision for warranty costs (deductible when paid) creates:',
+                    opts: ['DTL', 'DTA', 'Permanent difference', 'Current tax expense'],
+                    correct: 1,
+                    exp: 'Deductible temporary difference → DTA.'
+                }, {
+                    q: 'Which tax rate is used to measure deferred tax?',
+                    opts: [
+                        'Average rate over past years',
+                        'Enacted or substantively enacted rate at the reporting date',
+                        'Estimated future rate',
+                        'Management’s chosen rate'
+                    ],
+                    correct: 1,
+                    exp: 'Use enacted or substantively enacted tax rates expected to apply when temporary differences reverse.'
+                }, {
+                    q: 'A company has a DTA of $10,000 but expects only $6,000 future taxable profits. The DTA should be:',
+                    opts: ['$10,000', '$6,000', '$0', '$4,000'],
+                    correct: 1,
+                    exp: 'DTA is recognised only to the extent that it is probable that taxable profit will be available. Reduce to $6,000.'
+                }, {
+                    q: 'Fines and penalties are usually:',
+                    opts: [
+                        'Deductible for tax purposes',
+                        'Non‑deductible – permanent difference',
+                        'Create deferred tax',
+                        'Capitalised'
+                    ],
+                    correct: 1,
+                    exp: 'Fines are non‑deductible, causing a permanent difference; no deferred tax.'
+                }]
+            }, {
+                id: 'consol',
+                title: 'Consolidation Basics',
+                notes: [
+                    'IFRS 10: control = power over investee, exposure to variable returns, ability to use power to affect returns.',
+                    'Consolidation adjustments: eliminate intra‑group transactions, unrealised profits.',
+                    'Goodwill = consideration transferred + NCI – fair value of net assets acquired. Non‑controlling interest (NCI) measured at fair value or proportionate share.',
+                    'Basic consolidation journal: Dr Share capital, Retained earnings, Goodwill; Cr Investment in subsidiary, NCI.',
+                    'Uniform accounting policies required; different reporting dates allowed if ≤3 months and adjusted for significant transactions.'
+                ],
+                questions: [{
+                    q: 'Under IFRS 10, control is NOT determined by:',
+                    opts: [
+                        'Power over the investee',
+                        'Exposure to variable returns',
+                        'Ability to use power to affect returns',
+                        'Owning more than 50% of shares'
+                    ],
+                    correct: 3,
+                    exp: 'Control can exist without majority ownership if other criteria are met (de facto control).'
+                }, {
+                    q: 'P Co buys 80% of S Co for $200,000 when S’s net assets fair value is $220,000. NCI measured at proportionate share. Goodwill is:',
+                    opts: ['$24,000', '$20,000', '$44,000', '$0'],
+                    correct: 0,
+                    exp: 'NCI = 20% × $220k = $44k. Goodwill = $200k + $44k – $220k = $24,000.'
+                }, {
+                    q: 'Intra‑group sales of inventory that remains unsold at year‑end result in:',
+                    opts: [
+                        'No adjustment needed',
+                        'Elimination of unrealised profit and reduction of inventory',
+                        'Increase in revenue',
+                        'A dividend'
+                    ],
+                    correct: 1,
+                    exp: 'Unrealised profit must be eliminated and inventory reduced to cost to the group.'
+                }, {
+                    q: 'In consolidated financial statements, non‑controlling interest is presented:',
+                    opts: [
+                        'As a liability',
+                        'Within equity, separately from parent shareholders’ equity',
+                        'As a provision',
+                        'In profit or loss only'
+                    ],
+                    correct: 1,
+                    exp: 'NCI is part of equity, presented separately.'
+                }, {
+                    q: 'When a subsidiary has a different year‑end, the difference must be no more than:',
+                    opts: ['1 month', '3 months', '6 months', '1 year'],
+                    correct: 1,
+                    exp: 'Difference should not be more than three months, with adjustments for significant transactions.'
+                }]
+            }];
+
+            // ---------- STATE ----------
+            const state = {
+                xp: 0,
+                levelThresholds: [0, 80, 250, 500, 900],
+                levelNames: ['Novice', 'Associate', 'Senior', 'Master', 'Guru'],
+                badges: [],
+                topicProgress: {}
+            };
+
+            // initialise topic progress
+            topics.forEach(t => {
+                state.topicProgress[t.id] = {
+                    answers: new Array(5).fill(null),
+                    completed: false,
+                    stars: 0
+                };
+            });
+
+            // ---------- PERSISTENCE ----------
+            function loadState() {
+                const saved = localStorage.getItem('accaLabState');
+                if (saved) {
+                    try {
+                        const parsed = JSON.parse(saved);
+                        state.xp = parsed.xp || 0;
+                        state.badges = parsed.badges || [];
+                        if (parsed.topicProgress) {
+                            for (let id in parsed.topicProgress) {
+                                if (state.topicProgress[id]) {
+                                    state.topicProgress[id] = parsed.topicProgress[id];
+                                }
+                            }
+                        }
+                        // recalc stars & completed from answers
+                        Object.keys(state.topicProgress).forEach(id => {
+                            const tp = state.topicProgress[id];
+                            if (tp.answers) {
+                                const correctCount = tp.answers.filter(a => a === true).length;
+                                tp.stars = correctCount;
+                                tp.completed = tp.answers.every(a => a !== null);
+                            } else {
+                                tp.answers = new Array(5).fill(null);
+                                tp.completed = false;
+                                tp.stars = 0;
+                            }
+                        });
+                    } catch (_) { /* ignore */ }
+                }
+            }
+
+            function saveState() {
+                localStorage.setItem('accaLabState', JSON.stringify(state));
+            }
+
+            // ---------- XP & LEVEL ----------
+            function getLevel(xp) {
+                for (let i = state.levelThresholds.length - 1; i >= 0; i--) {
+                    if (xp >= state.levelThresholds[i]) return i;
+                }
+                return 0;
+            }
+
+            function getLevelName(lvl) {
+                return state.levelNames[lvl] || 'Novice';
+            }
+
+            function xpForNextLevel(xp) {
+                const lvl = getLevel(xp);
+                if (lvl >= state.levelThresholds.length - 1) return Infinity;
+                return state.levelThresholds[lvl + 1] - xp;
+            }
+
+            function addXP(amount) {
+                state.xp += amount;
+
+                // check badges
+                if (state.xp >= 500 && !state.badges.includes('Half-Master')) {
+                    state.badges.push('Half-Master');
+                }
+                if (state.xp >= 900 && !state.badges.includes('Guru')) {
+                    state.badges.push('Guru');
+                }
+                const completedTopics = Object.values(state.topicProgress).filter(tp => tp.completed).length;
+                if (completedTopics >= 5 && !state.badges.includes('Consolidator')) {
+                    state.badges.push('Consolidator');
+                }
+                if (completedTopics >= 8 && !state.badges.includes('FR Champion')) {
+                    state.badges.push('FR Champion');
+                }
+
+                saveState();
+                updateUI();
+                showXPGain(amount);
+            }
+
+            function showXPGain(amount) {
+                const el = document.createElement('div');
+                el.className = 'xp-animation';
+                el.textContent = '+' + amount + ' XP';
+                document.body.appendChild(el);
+                setTimeout(() => el.remove(), 1000);
+            }
+
+            // ---------- DOM REFS ----------
+            const $dashboard = document.getElementById('dashboard');
+            const $topicView = document.getElementById('topicView');
+            const $topicTitle = document.getElementById('topicTitle');
+            const $notesBox = document.getElementById('notesBox');
+            const $quizContainer = document.getElementById('quizContainer');
+            const $backBtn = document.getElementById('backToDashboard');
+            const $xpFill = document.getElementById('xpFill');
+            const $xpDisplay = document.getElementById('xpDisplay');
+            const $levelDisplay = document.getElementById('levelDisplay');
+            const $badges = document.getElementById('badges');
+
+            let currentTopicId = null;
+
+            // ---------- RENDER ----------
+            function updateUI() {
+                const lvl = getLevel(state.xp);
+                const nextXP = xpForNextLevel(state.xp);
+                const lvlStart = state.levelThresholds[lvl];
+                const lvlEnd = (lvl >= state.levelThresholds.length - 1) ? state.xp + 1 : state.levelThresholds[lvl + 1];
+                const pct = Math.min(100, ((state.xp - lvlStart) / (lvlEnd - lvlStart)) * 100);
+                $xpFill.style.width = pct + '%';
+                $xpDisplay.textContent = state.xp + ' XP';
+                $levelDisplay.textContent = 'Level: ' + getLevelName(lvl);
+
+                $badges.innerHTML = state.badges.length ?
+                    state.badges.map(b => '<span class="badge earned">🏅 ' + b + '</span>').join('') :
+                    '<span class="badge">No badges yet</span>';
+
+                renderDashboard();
+            }
+
+            function renderDashboard() {
+                $dashboard.innerHTML = '';
+                topics.forEach(t => {
+                    const tp = state.topicProgress[t.id];
+                    const correct = tp.answers ? tp.answers.filter(a => a === true).length : 0;
+                    const completed = tp.completed || false;
+                    const card = document.createElement('div');
+                    card.className = 'topic-card' + (completed ? ' completed' : '');
+                    card.innerHTML =
+                        '<h3>' + t.title + '</h3>' +
+                        '<div class="meta">' +
+                        '<span>' + (completed ? '✓ Completed' : correct + '/5 correct') + '</span>' +
+                        '<span class="stars">' + '★'.repeat(correct) + '☆'.repeat(5 - correct) + '</span>' +
+                        '</div>';
+                    card.addEventListener('click', function() { openTopic(t.id); });
+                    $dashboard.appendChild(card);
+                });
+            }
+
+            // ---------- OPEN TOPIC ----------
+            function openTopic(id) {
+                currentTopicId = id;
+                const topic = topics.find(t => t.id === id);
+                const tp = state.topicProgress[id];
+
+                $topicTitle.textContent = topic.title;
+
+                $notesBox.innerHTML =
+                    '<h4>📘 Exam‑Focused Notes</h4>' +
+                    '<ul>' + topic.notes.map(n => '<li>' + n + '</li>').join('') + '</ul>';
+
+                renderQuiz(topic, tp);
+
+                $dashboard.style.display = 'none';
+                $topicView.classList.add('active');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+
+            // ---------- RENDER QUIZ ----------
+            function renderQuiz(topic, tp) {
+                const allAnswered = tp.answers.every(a => a !== null);
+                // find first unanswered, or 0 if all answered
+                let qIndex = tp.answers.findIndex(a => a === null);
+                if (qIndex === -1) qIndex = 0;
+
+                const qData = topic.questions[qIndex];
+                const userAnswer = tp.answers[qIndex];
+                const answered = userAnswer !== null;
+
+                // options
+                let optionsHTML = qData.opts.map((opt, idx) => {
+                    let btnClass = 'option-btn';
+                    if (answered) {
+                        if (idx === qData.correct) btnClass += ' correct';
+                        else if (idx === userAnswer && userAnswer !== qData.correct) btnClass += ' wrong';
+                    }
+                    const disabled = answered ? 'disabled' : '';
+                    return '<button class="' + btnClass + '" data-opt="' + idx + '" ' + disabled + '>' + opt +
+                    '</button>';
+                }).join('');
+
+                // feedback
+                let feedbackHTML = '';
+                if (answered) {
+                    const isCorrect = userAnswer === qData.correct;
+                    feedbackHTML =
+                        '<div class="feedback-msg ' + (isCorrect ? 'correct' : 'wrong') + '">' +
+                        (isCorrect ? '✓ Correct! ' : '✗ Incorrect. ') + qData.exp +
+                        '</div>';
+                }
+
+                const progressText = 'Question ' + (qIndex + 1) + ' of 5';
+                const correctCount = tp.answers.filter(a => a === true).length;
+
+                let nextBtn = '';
+                if (answered && !allAnswered) {
+                    nextBtn = '<button class="btn" id="nextQuestionBtn">Next Question →</button>';
+                }
+                let finishBtn = '';
+                if (allAnswered) {
+                    finishBtn = '<button class="btn secondary" id="finishReviewBtn">Review Complete</button>';
+                }
+
+                $quizContainer.innerHTML =
+                    '<div class="stats-row">' +
+                    '<span>' + progressText + '</span>' +
+                    '<span>' + correctCount + '/5 correct</span>' +
+                    '</div>' +
+                    '<div class="question-text">' + qData.q + '</div>' +
+                    '<div class="options" id="optionsDiv">' + optionsHTML + '</div>' +
+                    '<div id="feedbackDiv">' + feedbackHTML + '</div>' +
+                    '<div class="quiz-actions">' +
+                    nextBtn +
+                    finishBtn +
+                    '</div>';
+
+                // attach events
+                if (!answered) {
+                    document.querySelectorAll('#optionsDiv .option-btn').forEach(btn => {
+                        btn.addEventListener('click', function(e) {
+                            const optIdx = parseInt(e.target.getAttribute('data-opt'), 10);
+                            handleAnswer(topic.id, qIndex, optIdx);
+                        });
+                    });
+                }
+
+                const nextBtnEl = document.getElementById('nextQuestionBtn');
+                if (nextBtnEl) {
+                    nextBtnEl.addEventListener('click', function() {
+                        // find next unanswered
+                        const nextIdx = tp.answers.findIndex((a, idx) => a === null && idx > qIndex);
+                        const target = nextIdx >= 0 ? nextIdx : tp.answers.findIndex(a => a === null);
+                        if (target >= 0) {
+                            renderQuiz(topic, tp);
+                        } else {
+                            // if all answered, just re-render (should show finish)
+                            renderQuiz(topic, tp);
+                        }
+                    });
+                }
+
+                const finishBtnEl = document.getElementById('finishReviewBtn');
+                if (finishBtnEl) {
+                    finishBtnEl.addEventListener('click', function() {
+                        backToDashboard();
+                    });
+                }
+            }
+
+            // ---------- HANDLE ANSWER ----------
+            function handleAnswer(topicId, qIndex, selected) {
+                const topic = topics.find(t => t.id === topicId);
+                const tp = state.topicProgress[topicId];
+                if (!tp || tp.answers[qIndex] !== null) return;
+
+                const isCorrect = (selected === topic.questions[qIndex].correct);
+                tp.answers[qIndex] = isCorrect;
+
+                // XP
+                addXP(isCorrect ? 15 : 2);
+
+                // check completion
+                const allAnswered = tp.answers.every(a => a !== null);
+                if (allAnswered) {
+                    tp.completed = true;
+                    const correctCount = tp.answers.filter(a => a === true).length;
+                    tp.stars = correctCount;
+                    addXP(25); // topic completion bonus
+                    if (correctCount === 5) addXP(30); // perfect bonus
+                }
+
+                saveState();
+                renderQuiz(topic, tp);
+            }
+
+            // ---------- BACK TO DASHBOARD ----------
+            function backToDashboard() {
+                $topicView.classList.remove('active');
+                $dashboard.style.display = '';
+                currentTopicId = null;
+                updateUI();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+
+            $backBtn.addEventListener('click', backToDashboard);
+
+            // ---------- INIT ----------
+            loadState();
+            updateUI();
+
+        })();
+    </script>
+</body>
+</html>
